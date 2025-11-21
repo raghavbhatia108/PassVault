@@ -1,687 +1,504 @@
-// import React, { useEffect, useState } from "react";
-// import { toast } from 'react-hot-toast';
-
-// const Manager = () => {
-//   const [form, setForm] = useState({
-//     website: "",
-//     username: "",
-//     password: "",
-//   });
-
-//   const [passwords, setPasswords] = useState([]);
-
-//   const handleCopy = (text) => {
-//     navigator.clipboard.writeText(text)
-//       .then(() => {
-//         // ✅ Check device width
-//         const isMobile = window.innerWidth < 640; // sm breakpoint (Tailwind)
-        
-//         toast.success("Copied to clipboard!", {
-//           position: isMobile ? "bottom-center" : "top-center",
-//           duration: 2000,
-//           style: {
-//             background: "#0025dfff",
-//             color: "#fff",
-//           },
-//         });
-//       })
-//       .catch(() => {
-//         toast.error("Failed to copy!", {
-//           position: "bottom-center",
-//         });
-//   });
-// }
-
-//   // Load saved passwords from localStorage on first render
-//   useEffect(() => {
-//     const saved = JSON.parse(localStorage.getItem("passwords")) || [];
-//     setPasswords(saved);
-//   }, []);
-
-//   const handleChange = (e) => {
-//     setForm({ ...form, [e.target.name]: e.target.value });
-//   };
-
-//   const handleSave = () => {
-//     if (!form.website || !form.username || !form.password) return;
-
-//     const newPasswords = [...passwords, form];
-//     setPasswords(newPasswords);
-//     localStorage.setItem("passwords", JSON.stringify(newPasswords));
-
-//     setForm({ website: "", username: "", password: "" });
-//   };
-
-//   return (
-//     <div className="relative min-h-screen">
-//       {/* Background */}
-//       <div className="absolute inset-0 bg-white [background:radial-gradient(125%_125%_at_50%_10%,#fff_40%,#63e_100%)] -z-10"></div>
-
-//       {/* Main container */}
-//       <div className="p-6 sm:p-10 md:p-16 lg:p-14">
-//         {/* Logo */}
-//         <div className="mt-4 flex justify-center items-center gap-2 flex-wrap text-center">
-//           <img src="/logo.png" alt="Logo" className="w-10 sm:w-12" />
-//           <p className="text-[1.5rem] sm:text-[2rem] font-semibold">
-//             <span className="text-blue-600">&lt;Pass</span>
-//             <span className="text-red-500">Vault/&gt;</span>
-//           </p>
-//         </div>
-
-//         {/* Heading */}
-//         <div className="flex justify-center items-center mt-3 text-center">
-//           <h1 className="text-xl sm:text-2xl font-semibold text-gray-800">
-//             Your own Password Manager
-//           </h1>
-//         </div>
-
-//         {/* Input Fields */}
-//         <div className="inputs w-[90%] sm:w-3/4 md:w-1/2 mx-auto mt-8 space-y-4 flex flex-col justify-center">
-//           <input
-//             name="website"
-//             type="text"
-//             value={form.website}
-//             onChange={handleChange}
-//             placeholder="Enter Website URL"
-//             className="border border-blue-400 rounded-3xl p-3 w-full text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-300"
-//           />
-
-//           <div className="flex flex-col sm:flex-row gap-3">
-//             <input
-//               name="username"
-//               type="text"
-//               placeholder="Enter Username"
-//               value={form.username}
-//               onChange={handleChange}
-//               className="border border-blue-400 rounded-3xl p-3 w-full sm:w-1/2 text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-300"
-//             />
-
-//             <div className="relative w-full sm:w-1/2">
-//               <input
-//                 name="password"
-//                 type="password"
-//                 placeholder="Enter Password"
-//                 value={form.password}
-//                 onChange={handleChange}
-//                 className="border border-blue-400 rounded-3xl p-3 w-full text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-300 pr-12"
-//               />
-//               <div className="absolute inset-y-0 right-3 flex items-center">
-//                 <lord-icon
-//                   src="https://cdn.lordicon.com/dicvhxpz.json"
-//                   trigger="click"
-//                   stroke="bold"
-//                   colors="primary:#1b1091,secondary:#1b1091"
-//                   style={{ width: "24px", height: "24px" }}
-//                   className="cursor-pointer"
-//                 ></lord-icon>
-//               </div>
-//             </div>
-//           </div>
-
-//           <button
-//             onClick={handleSave}
-//             className="bg-blue-600 mx-auto w-1/2 sm:w-1/3 md:w-1/6 h-12 border border-blue-400 rounded-3xl flex justify-center items-center cursor-pointer text-lg sm:text-xl font-semibold text-white gap-2 hover:bg-blue-700 transition-all"
-//           >
-//             Save
-//             <lord-icon
-//               src="https://cdn.lordicon.com/vjgknpfx.json"
-//               trigger="hover"
-//               colors="primary:#ffffff,secondary:#ffffff"
-//               stroke="bold"
-//               style={{ width: "30px", height: "30px" }}
-//             ></lord-icon>
-//           </button>
-//         </div>
-
-//         {/* Table Section */}
-//         <div className="mt-10 w-full">
-//           <h2 className="text-black font-bold text-center text-2xl sm:text-3xl">
-//             Your Passwords
-//           </h2>
-
-//           {passwords.length > 0 ? (
-//             <table className="bg-blue-600 m-auto mt-4 border border-blue-800 w-[95%] sm:w-[90%] text-sm sm:text-base">
-//               <thead>
-//                 <tr>
-//                   <th className="px-3 sm:px-4 py-2 border text-center">
-//                     Website
-//                   </th>
-//                   <th className="px-3 sm:px-4 py-2 border text-center">
-//                     Username
-//                   </th>
-//                   <th className="px-3 sm:px-4 py-2 border text-center">
-//                     Password
-//                   </th>
-//                   <th className="px-3 sm:px-4 py-2 border text-center">
-//                     Actions
-//                   </th>
-//                 </tr>
-//               </thead>
-
-//               <tbody className="bg-white text-blue-600">
-//                 {passwords.map((item, index) => (
-//                   <tr key={index}>
-//                  <td className="px-3 py-2 border text-center align-middle max-w-[200px]">
-//   <div className="flex items-center justify-center gap-2 break-words text-center w-full overflow-hidden">
-//     <span className="whitespace-normal break-words w-full break-all truncate">
-//       {item.website}
-//     </span>
-//     <lord-icon
-//       src="https://cdn.lordicon.com/jectmwqf.json"
-//       trigger="click"
-//       stroke="bold"
-//       colors="primary:#2516c7,secondary:#c71f16"
-//       style={{ width: "22px" }}
-//       onClick={() => handleCopy(item.website)}
-//     ></lord-icon>
-//   </div>
-// </td>
-
-
-
-//                     <td className="px-3 py-2 border text-center break-all">
-//                       <div className="flex flex-col sm:flex-row items-center justify-center gap-2">
-//                         <span>{item.username}</span>
-//                         <lord-icon
-//                           src="https://cdn.lordicon.com/jectmwqf.json"
-//                           trigger="click"
-//                           stroke="bold"
-//                           colors="primary:#2516c7,secondary:#c71f16"
-//                           style={{ width: "22px" }}
-//                         ></lord-icon>
-//                       </div>
-//                     </td>
-
-//                     <td className="px-3 py-2 border text-center break-all">
-//                       <div className="flex flex-col sm:flex-row items-center justify-center gap-2">
-//                         <span>{item.password}</span>
-//                         <lord-icon
-//                           src="https://cdn.lordicon.com/jectmwqf.json"
-//                           trigger="click"
-//                           stroke="bold"
-//                           colors="primary:#2516c7,secondary:#c71f16"
-//                           style={{ width: "22px" }}
-//                         ></lord-icon>
-//                       </div>
-//                     </td>
-
-//                     <td className="px-3 py-2 border text-center">
-//                       <div className="flex justify-center gap-3">
-//                         <button>
-//                           <lord-icon
-//                             src="https://cdn.lordicon.com/fikcyfpp.json"
-//                             trigger="hover"
-//                             stroke="bold"
-//                             colors="primary:#2516c7,secondary:#c71f16"
-//                             style={{ width: "25px" }}
-//                           ></lord-icon>
-//                         </button>
-//                         <button>
-//                           <lord-icon
-//                             src="https://cdn.lordicon.com/jzinekkv.json"
-//                             trigger="hover"
-//                             stroke="bold"
-//                             colors="primary:#2516c7,secondary:#c71f16"
-//                             style={{ width: "25px" }}
-//                           ></lord-icon>
-//                         </button>
-//                       </div>
-//                     </td>
-//                   </tr>
-//                 ))}
-//               </tbody>
-//             </table>
-//           ) : (
-//             <p className="text-center mt-4 text-gray-700">
-//               No passwords saved yet.
-//             </p>
-//           )}
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default Manager;
-
-
 import React, { useEffect, useState, useCallback } from "react";
-import { toast, Toaster } from 'react-hot-toast';
+import { toast, Toaster } from "react-hot-toast";
+import { Eye, EyeOff, Copy, Trash2, Edit2, Github, Moon, Sun, Globe, User, Lock } from "lucide-react";
 
-// Load the Lordicon script once
-const LordIcon = () => {
+// --- LordIcon Loader ---
+const LordIconLoader = () => {
   useEffect(() => {
-    const script = document.createElement('script');
-    script.src = 'https://cdn.lordicon.com/lordicon.js';
+    const script = document.createElement("script");
+    script.src = "https://cdn.lordicon.com/lordicon.js";
     document.body.appendChild(script);
   }, []);
   return null;
 };
 
-// --- Custom Components for Icons based on Theme ---
+// --- Components ---
 
-const PasswordIcon = ({ isDark }) => (
+const InteractiveIcon = ({ src, trigger = "hover", colors, size = "24px", onClick }) => (
+  <div 
+    onClick={onClick} 
+    className="cursor-pointer flex items-center justify-center hover:scale-110 transition-transform duration-200"
+    style={{ width: size, height: size }}
+  >
     <lord-icon
-        src="https://cdn.lordicon.com/dicvhxpz.json"
-        trigger="click"
-        stroke="bold"
-        colors={isDark ? "primary:#a8a29e,secondary:#a8a29e" : "primary:#1b1091,secondary:#1b1091"}
-        style={{ width: "24px", height: "24px" }}
-        className="cursor-pointer"
+      src={src}
+      trigger={trigger}
+      colors={colors}
+      style={{ width: "100%", height: "100%" }}
     />
+  </div>
 );
 
-const SaveIcon = ({ isDark }) => (
-    <lord-icon
-        src="https://cdn.lordicon.com/vjgknpfx.json"
-        trigger="hover"
-        colors={isDark ? "primary:#f8f9fa,secondary:#f8f9fa" : "primary:#ffffff,secondary:#ffffff"}
-        stroke="bold"
-        style={{ width: "30px", height: "30px" }}
-    />
-);
-
-const ActionIcon = ({ src, colors, onClick }) => (
-    <button onClick={onClick} className="p-1 rounded-full hover:bg-opacity-20 transition-colors duration-200">
-        <lord-icon
-            src={src}
-            trigger="hover"
-            stroke="bold"
-            colors={colors}
-            style={{ width: "25px", height: "25px" }}
-        />
-    </button>
-);
-
-const GithubIcon = ({ isDark }) => (
-    <a 
-        href="https://github.com" 
-        target="_blank" 
-        rel="noopener noreferrer"
-        className={`flex items-center gap-1 p-2 rounded-xl transition-colors duration-500 ${isDark ? 'text-gray-300 hover:text-white hover:bg-gray-700/50' : 'text-gray-700 hover:text-gray-900 hover:bg-gray-200'}`}
-        aria-label="View PassVault on GitHub"
-    >
-        <img src="/github.png" alt="GitHub" className="w-10 sm:w-14" />
-        <span className="text-sm font-medium hidden sm:inline">GitHub</span>
-    </a>
+const ActionButton = ({ onClick, children, className, title }) => (
+  <button
+    onClick={onClick}
+    title={title}
+    className={`p-2 rounded-full transition-all duration-200 active:scale-95 flex items-center justify-center ${className}`}
+  >
+    {children}
+  </button>
 );
 
 const App = () => {
+  const [theme, setTheme] = useState(() => localStorage.getItem("theme") || "dark");
+  const isDark = theme === "dark";
+
+  const [form, setForm] = useState({
+    id: null,
+    website: "",
+    username: "",
+    password: "",
+  });
+  const [passwords, setPasswords] = useState([]);
+  const [isEditing, setIsEditing] = useState(false);
+  const [showPasswordInput, setShowPasswordInput] = useState(false);
+  const [visiblePasswords, setVisiblePasswords] = useState({});
+
+  // Theme Management
+  useEffect(() => {
+    document.documentElement.classList.remove("dark", "light");
+    document.documentElement.classList.add(theme);
+    localStorage.setItem("theme", theme);
+  }, [theme]);
+
+  // Data Persistence
+  useEffect(() => {
+    const saved = JSON.parse(localStorage.getItem("passwords")) || [];
+    setPasswords(saved);
+  }, []);
+
+  const toggleTheme = () => setTheme(prev => (prev === "dark" ? "light" : "dark"));
+
+  const togglePasswordVisibility = (id) => {
+    setVisiblePasswords(prev => ({ ...prev, [id]: !prev[id] }));
+  };
+
+  const handleCopy = useCallback((text, type) => {
+    if (!text) return;
     
-    const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'dark');
-    const isDark = theme === 'dark';
+    // Modern clipboard API with fallback
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => {
+             showToast(type);
+        }).catch(() => fallbackCopy(text, type));
+    } else {
+        fallbackCopy(text, type);
+    }
+  }, [isDark]);
 
-    const [form, setForm] = useState({ id: null, website: "", username: "", password: "" });
-    const [passwords, setPasswords] = useState([]);
-    const [isEditing, setIsEditing] = useState(false);
-    // State to track which passwords should be visible in the table
-    const [visiblePasswords, setVisiblePasswords] = useState({});
+  const fallbackCopy = (text, type) => {
+    const el = document.createElement("textarea");
+    el.value = text;
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand("copy");
+    document.body.removeChild(el);
+    showToast(type);
+  };
 
-    // Apply or remove 'dark' class on the HTML element
-    useEffect(() => {
-        document.documentElement.classList.remove('dark', 'light');
-        document.documentElement.classList.add(theme);
-        localStorage.setItem('theme', theme);
-    }, [theme]);
+  const showToast = (type) => {
+    const isMobile = window.innerWidth < 640;
+    toast.success(`${type} Copied!`, {
+      position: isMobile ? "bottom-center" : "top-center",
+      style: {
+        background: isDark ? "#374151" : "#2563eb",
+        color: "#fff",
+        borderRadius: "12px",
+      },
+      iconTheme: {
+        primary: "#fff",
+        secondary: isDark ? "#374151" : "#2563eb",
+      },
+    });
+  };
 
-    // Load saved passwords from localStorage on first render
-    useEffect(() => {
-        const saved = JSON.parse(localStorage.getItem("passwords")) || [];
-        setPasswords(saved);
-    }, []);
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
 
-    // Toggle theme function
-    const toggleTheme = () => {
-        setTheme(prevTheme => prevTheme === 'dark' ? 'light' : 'dark');
-    };
+  const handleSave = () => {
+    if (!form.website || !form.username || !form.password) {
+      toast.error("Please fill in all fields", {
+        style: { background: isDark ? "#ef4444" : "#ef4444", color: "white" },
+        position: "bottom-center"
+      });
+      return;
+    }
 
-    // Toggle visibility for a specific password row
-    const togglePasswordVisibility = (id) => {
-        setVisiblePasswords(prev => ({
-            ...prev,
-            [id]: !prev[id]
-        }));
-    };
+    let newPasswords;
+    if (isEditing) {
+      newPasswords = passwords.map((p) => (p.id === form.id ? form : p));
+      setIsEditing(false);
+      toast.success("Entry Updated!", { icon: "🔄" });
+    } else {
+      const newEntry = { ...form, id: Date.now() };
+      newPasswords = [...passwords, newEntry];
+      toast.success("Entry Saved!", { icon: "💾" });
+    }
 
-    const handleCopy = useCallback((text, type) => {
-        // Fallback for document.execCommand in case navigator.clipboard is restricted
-        const copyToClipboard = (str) => {
-            const el = document.createElement('textarea');
-            el.value = str;
-            el.setAttribute('readonly', '');
-            el.style.position = 'absolute';
-            el.style.left = '-9999px';
-            document.body.appendChild(el);
-            const selected =
-                document.getSelection().rangeCount > 0
-                    ? document.getSelection().getRangeAt(0)
-                    : false;
-            el.select();
-            document.execCommand('copy');
-            document.body.removeChild(el);
-            if (selected) {
-                document.getSelection().removeAllRanges();
-                document.getSelection().addRange(selected);
-            }
-        };
+    setPasswords(newPasswords);
+    localStorage.setItem("passwords", JSON.stringify(newPasswords));
+    setForm({ id: null, website: "", username: "", password: "" });
+  };
+
+  const handleEdit = (item) => {
+    setForm(item);
+    setIsEditing(true);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const handleDelete = (id) => {
+    const newPasswords = passwords.filter((p) => p.id !== id);
+    setPasswords(newPasswords);
+    localStorage.setItem("passwords", JSON.stringify(newPasswords));
+    toast.success("Deleted successfully");
+  };
+
+  // Styling Variables
+  const lordIconColors = isDark ? "primary:#60a5fa,secondary:#fca5a5" : "primary:#2563eb,secondary:#ef4444";
+  const cardBg = isDark ? "bg-gray-800/60" : "bg-white/80";
+  const inputBg = isDark ? "bg-gray-900/50 border-gray-700 text-white focus:border-blue-500" : "bg-white border-gray-300 text-gray-800 focus:border-blue-600";
+  const borderColor = isDark ? "border-gray-700" : "border-blue-100";
+
+  return (
+    <>
+      <LordIconLoader />
+      <Toaster />
+      
+      <div className={`min-h-screen flex flex-col transition-colors duration-500 ${isDark ? "bg-gray-900" : "bg-gray-50"}`}>
         
-        copyToClipboard(text);
+        {/* Dynamic Background */}
+        <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
+             <div className={`absolute -top-[20%] -left-[10%] w-[70%] h-[70%] rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob ${isDark ? "bg-purple-900" : "bg-blue-200"}`}></div>
+             <div className={`absolute top-[20%] -right-[10%] w-[70%] h-[70%] rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000 ${isDark ? "bg-blue-900" : "bg-purple-200"}`}></div>
+             <div className={`absolute -bottom-[20%] left-[20%] w-[70%] h-[70%] rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000 ${isDark ? "bg-indigo-900" : "bg-pink-200"}`}></div>
+        </div>
 
-        const isMobile = window.innerWidth < 640; 
-        toast.success(`${type} Copied!`, {
-            position: isMobile ? "bottom-center" : "top-center",
-            duration: 2000,
-            style: {
-                background: isDark ? "#4b5563" : "#0025dfff",
-                color: "#fff",
-            },
-        });
-    }, [isDark]);
+        {/* Navbar */}
+        <nav className={`w-full px-6 py-4 flex justify-between items-center sticky top-0 z-50 backdrop-blur-lg border-b ${borderColor} ${isDark ? "bg-gray-900/80" : "bg-white/80"}`}>
+          <div className="flex items-center gap-2">
+            <div className="relative group">
+                <div className={`absolute inset-0 bg-blue-500 blur-lg opacity-50 rounded-full group-hover:opacity-75 transition-opacity`}></div>
+                <img src="/logo.png" alt="Logo" className="w-10 h-10 relative rounded-xl shadow-lg" />
+            </div>
+            <span className="text-2xl font-black tracking-tight hidden sm:block">
+              <span className="text-blue-500">&lt;Pass</span>
+              <span className="text-rose-500">Vault/&gt;</span>
+            </span>
+          </div>
 
+          <div className="flex items-center gap-4">
+            <a
+                href="https://github.com/raghavbhatia108/PassVault"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`p-2 rounded-full transition-colors ${isDark ? "hover:bg-gray-800 text-gray-300" : "hover:bg-blue-50 text-gray-600"}`}
+            >
+                <Github size={24} />
+            </a>
+            <button
+              onClick={toggleTheme}
+              className={`p-2 rounded-full transition-transform hover:rotate-12 ${isDark ? "bg-gray-800 text-yellow-400" : "bg-blue-100 text-blue-600"}`}
+            >
+              {isDark ? <Moon size={24} /> : <Sun size={24} />}
+            </button>
+          </div>
+        </nav>
 
-    const handleChange = (e) => {
-        setForm({ ...form, [e.target.name]: e.target.value });
-    };
+        {/* Main Content */}
+        <main className="flex-grow container mx-auto px-4 py-8 max-w-5xl">
+          
+          {/* Header Text */}
+          <div className="text-center mb-10 space-y-2">
+            <h1 className={`text-3xl md:text-4xl font-bold ${isDark ? "text-white" : "text-gray-800"}`}>
+              Secure your digital life.
+            </h1>
+            <p className={`text-sm md:text-base ${isDark ? "text-gray-400" : "text-gray-500"}`}>
+              Store your passwords locally with military-grade... localStorage.
+            </p>
+          </div>
 
-    const handleSave = () => {
-        if (!form.website || !form.username || !form.password) {
-            toast.error("All fields are required.", {
-                style: { background: isDark ? '#ef4444' : '#f87171', color: 'white' }
-            });
-            return;
-        }
+          {/* Input Form Card */}
+          <div className={`p-6 md:p-8 rounded-2xl shadow-xl backdrop-blur-md border ${borderColor} ${cardBg} mb-12 transition-all duration-300`}>
+            <div className="flex items-center justify-between mb-6">
+                <h2 className={`text-xl font-bold flex items-center gap-2 ${isDark ? "text-gray-100" : "text-gray-800"}`}>
+                    <lord-icon
+                        src="https://cdn.lordicon.com/pithnlch.json"
+                        trigger="hover"
+                        colors={lordIconColors}
+                        style={{width: '32px', height: '32px'}}
+                    />
+                    {isEditing ? "Edit Credentials" : "Add New Credentials"}
+                </h2>
+            </div>
 
-        let newPasswords;
-
-        if (isEditing) {
-            // Edit existing password
-            newPasswords = passwords.map(p => p.id === form.id ? form : p);
-            setIsEditing(false);
-            toast.success("Password Updated!", {
-                style: { background: isDark ? '#10b981' : '#059669', color: 'white' }
-            });
-        } else {
-            // Add new password
-            const newEntry = { ...form, id: Date.now() };
-            newPasswords = [...passwords, newEntry];
-            toast.success("Password Saved!", {
-                style: { background: isDark ? '#3b82f6' : '#2563eb', color: 'white' }
-            });
-        }
-
-        setPasswords(newPasswords);
-        localStorage.setItem("passwords", JSON.stringify(newPasswords));
-
-        // Reset form (except for clearing the ID which needs to be explicitly set to null)
-        setForm({ id: null, website: "", username: "", password: "" });
-    };
-
-    const handleEdit = (passwordItem) => {
-        setForm(passwordItem);
-        setIsEditing(true);
-        window.scrollTo({ top: 0, behavior: 'smooth' }); // Scroll to top for editing
-    };
-
-    const handleDelete = (id) => {
-        const newPasswords = passwords.filter(p => p.id !== id);
-        setPasswords(newPasswords);
-        localStorage.setItem("passwords", JSON.stringify(newPasswords));
-        toast.success("Password Deleted!", {
-            style: { background: isDark ? '#ef4444' : '#dc2626', color: 'white' }
-        });
-    };
-
-    // Style constants based on theme
-    const bgPrimary = isDark ? "bg-gray-900" : "bg-white";
-    const textPrimary = isDark ? "text-gray-100" : "text-gray-800";
-    const textSecondary = isDark ? "text-gray-400" : "text-gray-500";
-    const bgContainer = isDark ? "bg-gray-800/80 backdrop-blur-sm" : "bg-white shadow-xl";
-    const inputBorder = isDark ? "border-gray-700 bg-gray-700/50 text-gray-200 placeholder-gray-400" : "border-blue-400 text-gray-700 placeholder-gray-400";
-    const tableHeaderBg = isDark ? "bg-gray-700 text-white" : "bg-blue-600 text-white";
-    const tableRowBg = isDark ? "bg-gray-800 text-gray-200 hover:bg-gray-700" : "bg-gray-50 text-blue-600 hover:bg-gray-100";
-    
-    // Modified table border style for clearer cell and row separation
-    const tableBorder = isDark ? "border-gray-600" : "border-blue-800";
-    const tableRowDivider = isDark ? "border-gray-700" : "border-gray-300"; 
-
-    const lordIconColors = isDark ? "primary:#3b82f6,secondary:#fca5a5" : "primary:#2516c7,secondary:#c71f16";
-    const editIconColors = isDark ? "primary:#fde047" : "primary:#2516c7"; 
-    const deleteIconColors = isDark ? "primary:#f87171" : "primary:#dc2626"; 
-
-    return (
-        <>
-            <LordIcon />
-            <Toaster />
-            <div className={`flex flex-col min-h-screen ${bgPrimary} transition-colors duration-500`}>
-                {/* Background Pattern/Gradient */}
-                <div className="absolute inset-0 -z-10" style={{
-                    background: isDark 
-                        ? 'radial-gradient(125% 125% at 50% 10%, #111827 40%, #1f2937 100%)' 
-                        : 'radial-gradient(125% 125% at 50% 10%, #fff 40%, #63e 100%)'
-                }}></div>
-
-                {/* Main content container (flexible height) */}
-                <div className="flex-grow p-4 sm:p-8 md:p-12 max-w-7xl mx-auto w-full">
-                    
-                    {/* Header: Logo, Title, GitHub, and Theme Toggle */}
-                    <div className="flex justify-between items-center mb-6">
-                        {/* Logo and Title */}
-                        <div className="flex items-center gap-2">
-                            <img src="/logo.png" alt="Logo" className="w-10 sm:w-12 rounded-lg" />
-                            <p className={`text-[1.5rem] sm:text-[2rem] font-extrabold ${textPrimary} transition-colors duration-500`}>
-                                <span className="text-blue-500">&lt;Pass</span>
-                                <span className="text-red-400">Vault/&gt;</span>
-                            </p>
-                        </div>
-                        
-                        {/* Action Icons: GitHub and Theme Toggle */}
-                        <div className="flex items-center gap-3">
-                            <GithubIcon isDark={isDark} />
-                            {/* Theme Toggle Button */}
-                            <button 
-                                onClick={toggleTheme}
-                                className={`p-2 rounded-full transition-colors duration-500 ${isDark ? 'bg-gray-700 hover:bg-gray-600 text-yellow-300' : 'bg-gray-200 hover:bg-gray-300 text-yellow-600'}`}
-                                aria-label={`Switch to ${isDark ? 'Light' : 'Dark'} Mode`}
-                            >
-                                {isDark ? (
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg> // Moon Icon
-                                ) : (
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg> // Sun Icon
-                                )}
-                            </button>
-                        </div>
+            <div className="space-y-5">
+                {/* Website Input */}
+                <div className="relative group">
+                    <div className={`absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none ${isDark ? "text-gray-400" : "text-blue-500"}`}>
+                        <Globe size={20} />
                     </div>
+                    <input
+                        name="website"
+                        value={form.website}
+                        onChange={handleChange}
+                        placeholder="Website URL (e.g. netflix.com)"
+                        className={`w-full pl-10 pr-4 py-3 rounded-xl outline-none border transition-all focus:ring-2 focus:ring-opacity-50 focus:ring-blue-500 ${inputBg}`}
+                    />
+                </div>
 
-
-                    {/* Heading */}
-                    <div className="flex justify-center items-center mt-3 text-center">
-                        <h1 className={`text-xl sm:text-2xl font-semibold ${textPrimary} transition-colors duration-500`}>
-                            Your own Password Manager
-                        </h1>
-                    </div>
-
-                    {/* Input Fields Card */}
-                    <div className={`inputs w-full md:w-3/4 lg:w-1/2 mx-auto mt-8 p-6 rounded-xl ${bgContainer} space-y-4 flex flex-col transition-colors duration-500`}>
-                        <h2 className={`text-xl font-bold ${textPrimary}`}>{isEditing ? 'Edit Password' : 'Add New Password'}</h2>
-                        
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    {/* Username Input */}
+                    <div className="relative">
+                        <div className={`absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none ${isDark ? "text-gray-400" : "text-blue-500"}`}>
+                            <User size={20} />
+                        </div>
                         <input
-                            name="website"
-                            type="text"
-                            value={form.website}
+                            name="username"
+                            value={form.username}
                             onChange={handleChange}
-                            placeholder="Enter Website URL"
-                            className={`border rounded-xl p-3 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-300 ${inputBorder}`}
+                            placeholder="Username / Email"
+                            className={`w-full pl-10 pr-4 py-3 rounded-xl outline-none border transition-all focus:ring-2 focus:ring-opacity-50 focus:ring-blue-500 ${inputBg}`}
                         />
-
-                        <div className="flex flex-col sm:flex-row gap-3">
-                            <input
-                                name="username"
-                                type="text"
-                                placeholder="Enter Username"
-                                value={form.username}
-                                onChange={handleChange}
-                                className={`border rounded-xl p-3 w-full sm:w-1/2 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-300 ${inputBorder}`}
-                            />
-
-                            <div className="relative w-full sm:w-1/2">
-                                <input
-                                    name="password"
-                                    type="password"
-                                    placeholder="Enter Password"
-                                    value={form.password}
-                                    onChange={handleChange}
-                                    className={`border rounded-xl p-3 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-300 ${inputBorder} pr-12`}
-                                />
-                                <div className="absolute inset-y-0 right-3 flex items-center">
-                                    <PasswordIcon isDark={isDark} />
-                                </div>
-                            </div>
-                        </div>
-
-                        <button
-                            onClick={handleSave}
-                            // Ensuring Update button is the same primary blue as Save button
-                            className={`mx-auto w-1/2 sm:w-1/3 md:w-1/4 h-12 border rounded-xl flex justify-center items-center cursor-pointer text-lg sm:text-xl font-semibold text-white gap-2 transition-all duration-300 bg-blue-600 hover:bg-blue-700 border-blue-400`}
-                        >
-                            {isEditing ? 'Update' : 'Save'}
-                            <SaveIcon isDark={isDark} />
-                        </button>
                     </div>
 
-                    {/* Table Section */}
-                    <div className="mt-12 w-full">
-                        <h2 className={`font-bold text-center text-2xl sm:text-3xl ${textPrimary}`}>
-                            Your Saved Passwords ({passwords.length})
-                        </h2>
-
-                        {passwords.length > 0 ? (
-                            <div className="overflow-x-auto mt-6 rounded-xl border-t-2">
-                                <table className={`m-auto w-full text-sm sm:text-base ${textPrimary} rounded-xl overflow-hidden`}>
-                                    <thead>
-                                        <tr className={`${tableHeaderBg} transition-colors duration-500`}>
-                                            <th className={`px-4 py-3 ${tableBorder} border-r`}>Website</th>
-                                            <th className={`px-4 py-3 ${tableBorder} border-r`}>Username</th>
-                                            <th className={`px-4 py-3 ${tableBorder} border-r`}>Password</th>
-                                            <th className={`px-4 py-3 ${tableBorder}`}>Actions</th>
-                                        </tr>
-                                    </thead>
-
-                                    <tbody>
-                                        {passwords.map((item, index) => (
-                                            <tr 
-                                                key={item.id} 
-                                                // Added border-b for row partition and updated light mode background
-                                                className={`${tableRowBg} transition-colors duration-500 border-b ${tableRowDivider} ${index === passwords.length - 1 ? 'border-b-0' : ''}`}
-                                            >
-                                                
-                                                <td className={`px-4 py-3 ${tableBorder} border-r text-center align-middle whitespace-normal break-all`}>
-                                                    <div className="flex items-center justify-center gap-2">
-                                                        <span className={`w-full text-center ${isDark ? 'text-blue-400' : 'text-blue-600'}`}>{item.website}</span>
-                                                        <ActionIcon 
-                                                            src="https://cdn.lordicon.com/jectmwqf.json" 
-                                                            colors={lordIconColors}
-                                                            onClick={() => handleCopy(item.website, 'Website')}
-                                                        />
-                                                    </div>
-                                                </td>
-
-                                                <td className={`px-4 py-3 ${tableBorder} border-r text-center align-middle whitespace-normal break-all`}>
-                                                    <div className="flex items-center justify-center gap-2">
-                                                        <span className={`${textSecondary}`}>{item.username}</span>
-                                                        <ActionIcon 
-                                                            src="https://cdn.lordicon.com/jectmwqf.json" 
-                                                            colors={lordIconColors}
-                                                            onClick={() => handleCopy(item.username, 'Username')}
-                                                        />
-                                                    </div>
-                                                </td>
-
-                                                <td className={`px-4 py-3 ${tableBorder} border-r text-center align-middle whitespace-normal break-all`}>
-                                                    <div className="flex items-center justify-center gap-2">
-                                                        <span className={`${textSecondary}`}>
-                                                            {visiblePasswords[item.id] ? item.password : '••••••••'}
-                                                        </span>
-                                                        
-                                                        {/* Password Visibility Toggle */}
-                                                        <button onClick={() => togglePasswordVisibility(item.id)} className="p-1 rounded-full hover:bg-opacity-20 transition-colors duration-200">
-                                                            <lord-icon
-                                                                src={visiblePasswords[item.id] ? "https://cdn.lordicon.com/mjmrmyzg.json" : "https://cdn.lordicon.com/lzzzsvqj.json"}
-                                                                trigger="click"
-                                                                stroke="bold"
-                                                                colors={isDark ? "primary:#a8a29e" : "primary:#1b1091"}
-                                                                style={{ width: "22px", height: "22px" }}
-                                                                className="cursor-pointer"
-                                                            />
-                                                        </button>
-
-                                                        {/* Copy Password Button */}
-                                                        <ActionIcon 
-                                                            src="https://cdn.lordicon.com/jectmwqf.json" 
-                                                            colors={lordIconColors}
-                                                            onClick={() => handleCopy(item.password, 'Password')}
-                                                        />
-                                                    </div>
-                                                </td>
-
-                                                <td className={`px-4 py-3 text-center`}>
-                                                    <div className="flex justify-center gap-3">
-                                                        {/* Edit Button */}
-                                                        <ActionIcon
-                                                            src="https://cdn.lordicon.com/fikcyfpp.json" // Edit icon
-                                                            colors={editIconColors}
-                                                            onClick={() => handleEdit(item)}
-                                                        />
-                                                        
-                                                        {/* Delete Button */}
-                                                        <ActionIcon
-                                                            src="https://cdn.lordicon.com/jzinekkv.json" // Delete icon
-                                                            colors={deleteIconColors}
-                                                            onClick={() => handleDelete(item.id)}
-                                                        />
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </div>
-                        ) : (
-                            <p className={`text-center mt-6 p-4 rounded-lg ${isDark ? 'bg-gray-700/50 text-gray-400' : 'bg-blue-100 text-gray-700'} transition-colors duration-500`}>
-                                No passwords saved yet. Start by adding one above!
-                            </p>
-                        )}
+                    {/* Password Input */}
+                    <div className="relative">
+                        <div className={`absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none ${isDark ? "text-gray-400" : "text-blue-500"}`}>
+                            <Lock size={20} />
+                        </div>
+                        <input
+                            name="password"
+                            type={showPasswordInput ? "text" : "password"}
+                            value={form.password}
+                            onChange={handleChange}
+                            placeholder="Password"
+                            className={`w-full pl-10 pr-12 py-3 rounded-xl outline-none border transition-all focus:ring-2 focus:ring-opacity-50 focus:ring-blue-500 ${inputBg}`}
+                        />
+                        <div 
+                            className={`absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer ${isDark ? "text-gray-400 hover:text-white" : "text-gray-400 hover:text-blue-600"}`}
+                            onClick={() => setShowPasswordInput(!showPasswordInput)}
+                        >
+                            {showPasswordInput ? <EyeOff size={20} /> : <Eye size={20} />}
+                        </div>
                     </div>
                 </div>
 
-                {/* FOOTER - Integrated and Theme-Aware */}
-                <footer className={`py-4 px-4 mt-auto border-t transition-colors duration-500 ${isDark ? 'bg-gray-800 border-gray-700 shadow-lg shadow-gray-900/50' : 'bg-gray-100 border-gray-200 shadow-md'}`}>
-                    <div className="flex flex-col items-center justify-center text-center space-y-3">
-                        {/* Logo and Brand */}
-                        <div className="flex flex-wrap justify-center items-center gap-2">
-                            <img src="/logo.png" alt="Logo" className="w-8 h-8" />
-                            <p className={`text-[1.2rem] sm:text-[1.5rem] font-extrabold ${textPrimary} transition-colors duration-500`}>
-                                <span className="text-blue-500">&lt;Pass</span>
-                                <span className="text-red-400">Vault/&gt;</span>
-                            </p>
-                        </div>
-
-                        {/* Made With Love */}
-                        <div className={`flex flex-wrap justify-center items-center gap-2 font-semibold text-base sm:text-lg ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                            <span>Made with</span>
-                            <lord-icon
-                                src="https://cdn.lordicon.com/ajzwsrcs.json"
-                                trigger="hover"
-                                // Adjusted colors for better contrast in both modes
-                                colors={isDark ? "primary:#ef4444,secondary:#374151" : "primary:#dc2626,secondary:#fca5a5"}
-                                style={{ width: 20, height: 20 }}
-                            ></lord-icon>
-                            <span>by Raghav Bhatia</span>
-                        </div>
-                    </div>
-                </footer>
+                {/* Save Button */}
+                <button
+                    onClick={handleSave}
+                    className={`w-full py-3 rounded-xl font-bold text-white shadow-lg shadow-blue-500/30 active:scale-[0.98] transition-all flex items-center justify-center gap-2
+                    ${isDark 
+                        ? "bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600" 
+                        : "bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-400 hover:to-blue-500"
+                    }`}
+                >
+                    <span>{isEditing ? "Update Password" : "Save Password"}</span>
+                    <lord-icon
+                        src="https://cdn.lordicon.com/jgnvfzqg.json"
+                        trigger="hover"
+                        colors="primary:#ffffff"
+                        style={{width: '24px', height: '24px'}}
+                    />
+                </button>
             </div>
-        </>
-    );
+          </div>
+
+          {/* Data Display Section */}
+          <div className="mt-8">
+            <h2 className={`text-2xl font-bold mb-6 flex items-center gap-2 ${isDark ? "text-gray-200" : "text-gray-800"}`}>
+                <span className="text-blue-500">Saved Passwords</span>
+                <span className={`text-sm font-normal px-2 py-1 rounded-md ${isDark ? "bg-gray-800 text-gray-400" : "bg-blue-100 text-blue-600"}`}>
+                    {passwords.length}
+                </span>
+            </h2>
+
+            {passwords.length === 0 ? (
+                 <div className={`flex flex-col items-center justify-center py-12 rounded-2xl border border-dashed ${borderColor} ${isDark ? "bg-gray-800/30 text-gray-400" : "bg-blue-50/50 text-gray-500"}`}>
+                    <lord-icon
+                        src="https://cdn.lordicon.com/ulnswmkk.json"
+                        trigger="loop"
+                        delay="2000"
+                        colors={lordIconColors}
+                        style={{width: '60px', height: '60px'}}
+                    />
+                    <p className="mt-4 font-medium">No passwords saved yet.</p>
+                 </div>
+            ) : (
+                <>
+                    {/* --- DESKTOP VIEW (Table) --- */}
+                    <div className="hidden md:block overflow-hidden rounded-2xl border shadow-lg backdrop-blur-sm transition-colors duration-300" style={{ borderColor: isDark ? '#374151' : '#bfdbfe' }}>
+                        <table className={`w-full text-left border-collapse ${isDark ? "bg-gray-800/50" : "bg-white"}`}>
+                            <thead className={`${isDark ? "bg-gray-900/80 text-gray-300" : "bg-blue-50 text-blue-700"} uppercase text-xs font-semibold tracking-wider`}>
+                                <tr>
+                                    <th className="p-4">Website</th>
+                                    <th className="p-4">Username</th>
+                                    <th className="p-4">Password</th>
+                                    <th className="p-4 text-center">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody className={`divide-y ${isDark ? "divide-gray-700 text-gray-300" : "divide-blue-100 text-gray-700"}`}>
+                                {passwords.map((item) => (
+                                    <tr key={item.id} className={`group transition-colors ${isDark ? "hover:bg-gray-700/50" : "hover:bg-blue-50/50"}`}>
+                                        <td className="p-4">
+                                            <div className="flex items-center justify-between gap-2 max-w-[200px]">
+                                                <span className="truncate font-medium">{item.website}</span>
+                                                <div className="opacity-0 group-hover:opacity-100 transition-opacity">
+                                                    <InteractiveIcon 
+                                                        src="https://cdn.lordicon.com/jectmwqf.json" 
+                                                        colors={lordIconColors} 
+                                                        size="20px"
+                                                        onClick={() => handleCopy(item.website, "Website")} 
+                                                    />
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td className="p-4">
+                                            <div className="flex items-center justify-between gap-2 max-w-[200px]">
+                                                <span className="truncate">{item.username}</span>
+                                                <div className="opacity-0 group-hover:opacity-100 transition-opacity">
+                                                    <InteractiveIcon 
+                                                        src="https://cdn.lordicon.com/jectmwqf.json" 
+                                                        colors={lordIconColors} 
+                                                        size="20px"
+                                                        onClick={() => handleCopy(item.username, "Username")} 
+                                                    />
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td className="p-4">
+                                            <div className="flex items-center gap-3">
+                                                <span className="font-mono text-lg tracking-widest">
+                                                    {visiblePasswords[item.id] ? item.password : "••••••••"}
+                                                </span>
+                                                <button onClick={() => togglePasswordVisibility(item.id)} className={`${isDark ? "text-gray-400 hover:text-white" : "text-gray-400 hover:text-blue-600"}`}>
+                                                    {visiblePasswords[item.id] ? <EyeOff size={16} /> : <Eye size={16} />}
+                                                </button>
+                                                <div className="opacity-0 group-hover:opacity-100 transition-opacity">
+                                                    <InteractiveIcon 
+                                                        src="https://cdn.lordicon.com/jectmwqf.json" 
+                                                        colors={lordIconColors} 
+                                                        size="20px"
+                                                        onClick={() => handleCopy(item.password, "Password")} 
+                                                    />
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td className="p-4">
+                                            <div className="flex items-center justify-center gap-2">
+                                                <ActionButton onClick={() => handleEdit(item)} className={isDark ? "hover:bg-blue-900/30 text-blue-400" : "hover:bg-blue-100 text-blue-600"}>
+                                                    <Edit2 size={18} />
+                                                </ActionButton>
+                                                <ActionButton onClick={() => handleDelete(item.id)} className={isDark ? "hover:bg-red-900/30 text-red-400" : "hover:bg-red-100 text-red-600"}>
+                                                    <Trash2 size={18} />
+                                                </ActionButton>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    {/* --- MOBILE VIEW (Cards) --- */}
+                    <div className="grid md:hidden gap-4">
+                        {passwords.map((item) => (
+                            <div key={item.id} className={`relative p-5 rounded-2xl border shadow-md backdrop-blur-md ${isDark ? "bg-gray-800/60 border-gray-700" : "bg-white/90 border-blue-100"}`}>
+                                
+                                {/* Header: Website & Actions */}
+                                <div className="flex justify-between items-start mb-3">
+                                    <div className="flex items-center gap-2 overflow-hidden">
+                                        <div className={`p-2 rounded-full ${isDark ? "bg-gray-700 text-blue-400" : "bg-blue-50 text-blue-600"}`}>
+                                            <Globe size={16} />
+                                        </div>
+                                        <span className={`font-bold text-lg truncate ${isDark ? "text-gray-100" : "text-gray-800"}`}>
+                                            {item.website}
+                                        </span>
+                                    </div>
+                                    <div className="flex gap-1">
+                                        <ActionButton onClick={() => handleEdit(item)} className={isDark ? "text-blue-400" : "text-blue-600"}>
+                                            <Edit2 size={18} />
+                                        </ActionButton>
+                                        <ActionButton onClick={() => handleDelete(item.id)} className={isDark ? "text-red-400" : "text-red-500"}>
+                                            <Trash2 size={18} />
+                                        </ActionButton>
+                                    </div>
+                                </div>
+
+                                {/* Username Row */}
+                                <div className={`flex items-center justify-between p-3 rounded-xl mb-2 ${isDark ? "bg-gray-900/50" : "bg-gray-50"}`}>
+                                    <div className="flex items-center gap-2 overflow-hidden">
+                                        <User size={14} className={isDark ? "text-gray-500" : "text-gray-400"} />
+                                        <span className={`text-sm truncate ${isDark ? "text-gray-300" : "text-gray-700"}`}>{item.username}</span>
+                                    </div>
+                                    <button onClick={() => handleCopy(item.username, "Username")} className={isDark ? "text-gray-500" : "text-gray-400"}>
+                                        <Copy size={14} />
+                                    </button>
+                                </div>
+
+                                {/* Password Row */}
+                                <div className={`flex items-center justify-between p-3 rounded-xl ${isDark ? "bg-gray-900/50" : "bg-gray-50"}`}>
+                                    <div className="flex items-center gap-2">
+                                        <Lock size={14} className={isDark ? "text-gray-500" : "text-gray-400"} />
+                                        <span className={`font-mono text-sm ${isDark ? "text-gray-300" : "text-gray-700"}`}>
+                                            {visiblePasswords[item.id] ? item.password : "••••••••"}
+                                        </span>
+                                    </div>
+                                    <div className="flex items-center gap-3">
+                                        <button onClick={() => togglePasswordVisibility(item.id)} className={isDark ? "text-gray-400" : "text-gray-500"}>
+                                            {visiblePasswords[item.id] ? <EyeOff size={16} /> : <Eye size={16} />}
+                                        </button>
+                                        <button onClick={() => handleCopy(item.password, "Password")} className={isDark ? "text-gray-400" : "text-gray-500"}>
+                                            <Copy size={14} />
+                                        </button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        ))}
+                    </div>
+                </>
+            )}
+          </div>
+
+        </main>
+
+        {/* Footer */}
+        <footer className={`py-6 text-center border-t ${isDark ? "bg-gray-900 border-gray-800 text-gray-500" : "bg-gray-50 border-gray-200 text-gray-600"}`}>
+           <div className="flex items-center justify-center gap-2 text-sm">
+             <span>Securely built by</span> 
+             <span className={`font-bold ${isDark ? "text-gray-300" : "text-gray-800"}`}>Raghav Bhatia</span>
+             <lord-icon
+                src="https://cdn.lordicon.com/pithnlch.json"
+                trigger="hover"
+                colors={lordIconColors}
+                style={{width: '20px', height: '20px'}}
+            />
+           </div>
+        </footer>
+
+      </div>
+
+      {/* Custom CSS for Animations */}
+      <style>{`
+        @keyframes blob {
+          0% { transform: translate(0px, 0px) scale(1); }
+          33% { transform: translate(30px, -50px) scale(1.1); }
+          66% { transform: translate(-20px, 20px) scale(0.9); }
+          100% { transform: translate(0px, 0px) scale(1); }
+        }
+        .animate-blob {
+          animation: blob 7s infinite;
+        }
+        .animation-delay-2000 {
+          animation-delay: 2s;
+        }
+        .animation-delay-4000 {
+          animation-delay: 4s;
+        }
+      `}</style>
+    </>
+  );
 };
 
 export default App;
