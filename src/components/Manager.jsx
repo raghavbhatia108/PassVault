@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from "react";
 import { toast, Toaster } from "react-hot-toast";
 import { Eye, EyeOff, Copy, Trash2, Edit2, Github, Moon, Sun, Globe, User, Lock } from "lucide-react";
 
-// --- LordIcon Loader ---
+
 const LordIconLoader = () => {
   useEffect(() => {
     const script = document.createElement("script");
@@ -12,7 +12,7 @@ const LordIconLoader = () => {
   return null;
 };
 
-// --- Components ---
+
 
 const InteractiveIcon = ({ src, trigger = "hover", colors, size = "24px", onClick }) => (
   <div 
@@ -54,14 +54,14 @@ const App = () => {
   const [showPasswordInput, setShowPasswordInput] = useState(false);
   const [visiblePasswords, setVisiblePasswords] = useState({});
 
-  // Theme Management
+
   useEffect(() => {
     document.documentElement.classList.remove("dark", "light");
     document.documentElement.classList.add(theme);
     localStorage.setItem("theme", theme);
   }, [theme]);
 
-  // Data Persistence
+
   useEffect(() => {
     const saved = JSON.parse(localStorage.getItem("passwords")) || [];
     setPasswords(saved);
@@ -76,7 +76,7 @@ const App = () => {
   const handleCopy = useCallback((text, type) => {
     if (!text) return;
     
-    // Modern clipboard API with fallback
+    
     if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(text).then(() => {
              showToast(type);
@@ -479,7 +479,6 @@ const App = () => {
 
       </div>
 
-      {/* Custom CSS for Animations */}
       <style>{`
         @keyframes blob {
           0% { transform: translate(0px, 0px) scale(1); }
